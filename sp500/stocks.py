@@ -7,37 +7,46 @@ from tqdm import tqdm
 
 from . import yfinance as yf
 
-# def snapshot():
+def symbols():
+    sp500_symbols : list = list(
+        pd.read_html(
+            'https://en.wikipedia.org/wiki/List_of_S%26P_500_companies',
+            header = 0
+        )[0]['Symbol']
+    )
+    return sp500_symbols
 
-#     all_bars : list = []
+def snapshot():
 
-#     sp500_symbols : list = list(
-#         pd.read_html(
-#             'https://en.wikipedia.org/wiki/List_of_S%26P_500_companies',
-#             header = 0
-#         )[0]['Symbol']
-#     )
+    all_bars : list = []
 
-#     for symbol in tqdm(sp500_symbols):
+    sp500_symbols : list = list(
+        pd.read_html(
+            'https://en.wikipedia.org/wiki/List_of_S%26P_500_companies',
+            header = 0
+        )[0]['Symbol']
+    )
 
-#         try:
-#             bars = yf.Ticker(symbol)\
-#                     .history(
-#                         end      = (dt.datetime.now().strftime("%Y-%m-%d")),
-#                         start    = (dt.datetime.now() - dt.timedelta(days=365)).strftime("%Y-%m-%d"),
-#                         interval = "1d"
-#                     )
+    for symbol in tqdm(sp500_symbols):
 
-#             bars["Symbol"] = symbol
-#             bars = bars[:200]
+        try:
+            bars = yf.Ticker(symbol)\
+                    .history(
+                        end      = (dt.datetime.now().strftime("%Y-%m-%d")),
+                        start    = (dt.datetime.now() - dt.timedelta(days=365)).strftime("%Y-%m-%d"),
+                        interval = "1d"
+                    )
 
-#         except:
-#             continue
+            bars["Symbol"] = symbol
+            bars = bars[:200]
 
-#         all_bars.append(bars)
-#         time.sleep(1)
+        except:
+            continue
 
-#     return pd.concat(all_bars)
+        all_bars.append(bars)
+        time.sleep(1)
+
+    return pd.concat(all_bars)
 
 def snapshot_norgate():
 
@@ -74,7 +83,7 @@ def snapshot_norgate():
 
     return dff
 
-def snapshot():
+def snapshot_nasdaq():
     sp500_symbols : list = list(
     pd.read_html(
         'https://en.wikipedia.org/wiki/List_of_S%26P_500_companies',
