@@ -1,10 +1,13 @@
 import pandas as pd
-
+import asyncio 
+import aiohttp
 from tqdm import tqdm
 
 import datetime as dt
 import json
+import logging
 import requests
+import time
 import numpy as np
 
 BASE_URL = 'https://finance.yahoo.com/calendar/earnings'

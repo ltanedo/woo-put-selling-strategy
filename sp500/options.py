@@ -39,6 +39,38 @@ def chain_condenser(data):
             # TESTIT: view first iteration
             # print(record)
             # quit()
+    
+    for expiration in data["callExpDateMap"].keys():
+        for strike in data["callExpDateMap"][expiration]:
+
+            keys = [
+                "putCall","symbol","exchangeName","bid","ask","last","bidSize",
+                "askSize", "lastSize","highPrice","lowPrice","openPrice","closePrice",
+                "totalVolume","tradeTimeInLong","quoteTimeInLong",
+                "volatility","delta","gamma","theta","vega","rho","openInterest",
+                "strikePrice","expirationDate","daysToExpiration","expirationType",
+                "percentChange","intrinsicValue","inTheMoney", "pennyPilot"
+            ]
+
+            
+
+            record = data["callExpDateMap"][expiration][strike][0]
+            record = { key: record[key] for key in keys }
+
+            record["isDelayed"]       = data["isDelayed"]
+            record["interestRate"]    = data["interestRate"]
+            record["underlying"]      = data["symbol"]
+            record["underlyingPrice"] = data["underlyingPrice"]
+
+            percentInTheMoney = (record["strikePrice"] - data["underlyingPrice"]) / data["underlyingPrice"] * 100
+            record["percentInTheMoney"] = percentInTheMoney if record["putCall"] == "PUT" else (-1 * percentInTheMoney)
+            record["collateral"] = record['last'] * 100
+
+            l_records.append(record)
+
+            # TESTIT: view first iteration
+            # print(record)
+            # quit()
 
     return l_records
 
@@ -50,6 +82,7 @@ def get_option_chain(symbol):
             "symbol": symbol
         },
     )
+
     return chain_condenser(resp.json())
 
 def snapshot():

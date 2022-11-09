@@ -7,37 +7,37 @@ from tqdm import tqdm
 
 from . import yfinance as yf
 
-def snapshot():
+# def snapshot():
 
-    all_bars : list = []
+#     all_bars : list = []
 
-    sp500_symbols : list = list(
-        pd.read_html(
-            'https://en.wikipedia.org/wiki/List_of_S%26P_500_companies',
-            header = 0
-        )[0]['Symbol']
-    )
+#     sp500_symbols : list = list(
+#         pd.read_html(
+#             'https://en.wikipedia.org/wiki/List_of_S%26P_500_companies',
+#             header = 0
+#         )[0]['Symbol']
+#     )
 
-    for symbol in tqdm(sp500_symbols):
+#     for symbol in tqdm(sp500_symbols):
 
-        try:
-            bars = yf.Ticker(symbol)\
-                    .history(
-                        end      = (dt.datetime.now().strftime("%Y-%m-%d")),
-                        start    = (dt.datetime.now() - dt.timedelta(days=365)).strftime("%Y-%m-%d"),
-                        interval = "1d"
-                    )
+#         try:
+#             bars = yf.Ticker(symbol)\
+#                     .history(
+#                         end      = (dt.datetime.now().strftime("%Y-%m-%d")),
+#                         start    = (dt.datetime.now() - dt.timedelta(days=365)).strftime("%Y-%m-%d"),
+#                         interval = "1d"
+#                     )
 
-            bars["Symbol"] = symbol
-            bars = bars[:200]
+#             bars["Symbol"] = symbol
+#             bars = bars[:200]
 
-        except:
-            continue
+#         except:
+#             continue
 
-        all_bars.append(bars)
-        time.sleep(1)
+#         all_bars.append(bars)
+#         time.sleep(1)
 
-    return pd.concat(all_bars)
+#     return pd.concat(all_bars)
 
 def snapshot_norgate():
 
@@ -74,7 +74,7 @@ def snapshot_norgate():
 
     return dff
 
-def snapshot_nasdaq():
+def snapshot():
     sp500_symbols : list = list(
     pd.read_html(
         'https://en.wikipedia.org/wiki/List_of_S%26P_500_companies',
